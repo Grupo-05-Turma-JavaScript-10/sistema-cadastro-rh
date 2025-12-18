@@ -15,7 +15,7 @@ import { ColaboradorModule } from './colaborador/colaborador.module';
       entities: [Colaborador],
       synchronize: true,
     }),
-    ColaboradorModule
+    ColaboradorModule,
   ],
   controllers: [],
   providers: [],
