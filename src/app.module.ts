@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Colaborador } from './colaborador/entities/colaborador.entity';
 import { ColaboradorModule } from './colaborador/colaborador.module';
+import { Cargo } from './cargo/entities/cargo.entity';
+import { CargoModule } from './cargo/cargo.module';
 
 @Module({
   imports: [
@@ -12,10 +14,11 @@ import { ColaboradorModule } from './colaborador/colaborador.module';
       username: 'root',
       password: 'root',
       database: 'db_rh',
-      entities: [Colaborador],
+      entities: [Colaborador, Cargo],
       synchronize: true,
     }),
     ColaboradorModule,
+    CargoModule
   ],
   controllers: [],
   providers: [],

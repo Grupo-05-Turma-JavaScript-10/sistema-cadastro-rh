@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsNumber, IsBoolean, IsEmail } from 'class-validator';
+import { Cargo } from '../../cargo/entities/cargo.entity';
 
 @Entity({ name: 'tb_colaboradores' })
 export class Colaborador {
@@ -31,4 +32,9 @@ export class Colaborador {
   @IsBoolean()
   @Column({ type: 'boolean' })
   status: boolean;
+
+  @ManyToOne(() => Cargo, (cargo) => cargo.colaborador, {
+    onDelete: 'CASCADE'
+  })
+  cargo: Cargo
 }
