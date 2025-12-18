@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Colaborador } from "../entities/colaborador.entity";
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 
 @Injectable()
 export class ColaboradorService {
@@ -26,5 +26,13 @@ export class ColaboradorService {
         throw new HttpException('Colaborador não encontrado', HttpStatus.NOT_FOUND);
 
         return colaborador;
+    }
+
+      async findAllByNome(nome: string): Promise<Colaborador[]> {
+        return await this.colaboradorRepository.find({
+            where: {
+                nome: ILike(`%${nome}%`)
+            }
+        });
     }
 }

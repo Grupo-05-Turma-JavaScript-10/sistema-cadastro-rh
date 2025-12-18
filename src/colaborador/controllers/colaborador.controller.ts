@@ -17,4 +17,10 @@ export class ColaboradorController {
     findById(@Param('id', ParseIntPipe) id: number): Promise<Colaborador> {
         return this.colaboradorService.findById(id);
     }
+
+    @Get("/nome/:nome")
+    @HttpCode(HttpStatus.OK)
+    findAllByNome(@Param('nome') nome: string): Promise<Colaborador[]> {
+        return this.colaboradorService.findAllByNome(nome);
+    }
 }
