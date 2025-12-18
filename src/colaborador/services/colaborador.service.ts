@@ -35,4 +35,9 @@ export class ColaboradorService {
             }
         });
     }
+
+    async create(colaborador: Colaborador): Promise<Colaborador> {
+  return await this.colaboradorRepository.save(colaborador);
+}
+
 }

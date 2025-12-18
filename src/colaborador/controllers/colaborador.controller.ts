@@ -1,4 +1,4 @@
-import { Controller, HttpCode, HttpStatus, Get, Param, ParseIntPipe } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { ColaboradorService } from "../services/colaborador.service";
 import { Colaborador } from "../entities/colaborador.entity";
 
@@ -23,4 +23,11 @@ export class ColaboradorController {
     findAllByNome(@Param('nome') nome: string): Promise<Colaborador[]> {
         return this.colaboradorService.findAllByNome(nome);
     }
+
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    create(@Body() colaborador: Colaborador): Promise<Colaborador> {
+        return this.colaboradorService.create(colaborador);
+}
+
 }
