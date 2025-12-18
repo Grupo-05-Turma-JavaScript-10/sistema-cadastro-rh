@@ -18,7 +18,7 @@ import { CargoModule } from './cargo/cargo.module';
       synchronize: true,
     }),
     ColaboradorModule,
-    CargoModule
+    CargoModule,
   ],
   controllers: [],
   providers: [],
