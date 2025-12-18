@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { ColaboradorService } from '../services/colaborador.service';
 import { Colaborador } from '../entities/colaborador.entity';
@@ -61,5 +62,11 @@ export class ColaboradorController {
   @HttpCode(HttpStatus.OK)
   uptade(@Body() colaborador: Colaborador): Promise<Colaborador> {
     return this.colaboradorService.uptade(colaborador);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id', ParseIntPipe) id: number){
+    return this.colaboradorService.delete(id);
   }
 }
