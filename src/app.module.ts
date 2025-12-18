@@ -5,6 +5,8 @@ import { ColaboradorModule } from './colaborador/colaborador.module';
 import { Cargo } from './cargo/entities/cargo.entity';
 import { CargoModule } from './cargo/cargo.module';
 import { AuthModule } from './auth/auth.module';
+import { Usuario } from './usuario/entities/usuario.entity';
+import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
   imports: [
@@ -15,12 +17,13 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'MinhaSenha123',
       database: 'db_rh',
-      entities: [Colaborador, Cargo],
+      entities: [Colaborador, Cargo, Usuario],
       synchronize: true,
     }),
     ColaboradorModule,
     CargoModule,
     AuthModule,
+    UsuarioModule
   ],
   controllers: [],
   providers: [],
