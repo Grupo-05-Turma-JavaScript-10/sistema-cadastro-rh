@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: 'MinhaSenha123',
       database: 'db_rh',
       entities: [Colaborador, Cargo],
       synchronize: true,
