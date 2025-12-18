@@ -56,4 +56,10 @@ export class ColaboradorController {
   create(@Body() colaborador: Colaborador): Promise<Colaborador> {
     return this.colaboradorService.create(colaborador);
   }
+
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  uptade(@Body() colaborador: Colaborador): Promise<Colaborador> {
+    return this.colaboradorService.uptade(colaborador);
+  }
 }
