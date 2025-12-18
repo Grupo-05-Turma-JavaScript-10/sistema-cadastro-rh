@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Colaborador } from "../../colaborador/entities/colaborador.entity"
 
 
 @Entity({name: "tb_usuarios"})
@@ -25,7 +26,7 @@ export class Usuario {
     @Column({length: 5000 }) 
     foto: string
 
-    // @OneToMany(() => Postagem, (postagem) => postagem.usuario)
-    // postagem: Postagem[]
+    @OneToMany(() => Colaborador, (colaborador) => colaborador.usuario)
+    colaborador: Colaborador[]
 
 }
