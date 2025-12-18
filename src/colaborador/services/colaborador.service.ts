@@ -9,7 +9,7 @@ export class ColaboradorService {
   constructor(
     @InjectRepository(Colaborador)
     private colaboradorRepository: Repository<Colaborador>,
-  ) {}
+  ) { }
 
   async calcularSalario(
     id: number,
@@ -28,7 +28,13 @@ export class ColaboradorService {
   }
 
   async findAll(): Promise<Colaborador[]> {
-    return await this.colaboradorRepository.find();
+    return await this.colaboradorRepository.find({
+      relations: {
+        cargo: true,
+        usuario: true
+      }
+
+    });
   }
 
   async findById(id: number): Promise<Colaborador> {
@@ -36,6 +42,10 @@ export class ColaboradorService {
       where: {
         id,
       },
+      relations: {
+        cargo: true,
+        usuario: true
+      }
     });
 
     if (!colaborador)
@@ -52,6 +62,10 @@ export class ColaboradorService {
       where: {
         nome: ILike(`%${nome}%`),
       },
+      relations:{
+                cargo: true,
+                usuario: true
+            }
     });
   }
 
