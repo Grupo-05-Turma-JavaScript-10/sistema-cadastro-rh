@@ -1,4 +1,4 @@
-import { Controller, HttpCode, HttpStatus, Get } from "@nestjs/common";
+import { Controller, HttpCode, HttpStatus, Get, Param, ParseIntPipe } from "@nestjs/common";
 import { ColaboradorService } from "../services/colaborador.service";
 import { Colaborador } from "../entities/colaborador.entity";
 
@@ -10,5 +10,11 @@ export class ColaboradorController {
     @HttpCode(HttpStatus.OK)
     findAll(): Promise<Colaborador[]> {
         return this.colaboradorService.findAll();
+    }
+
+    @Get("/:id")
+    @HttpCode(HttpStatus.OK)
+    findById(@Param('id', ParseIntPipe) id: number): Promise<Colaborador> {
+        return this.colaboradorService.findById(id);
     }
 }
