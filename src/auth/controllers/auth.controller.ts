@@ -6,16 +6,15 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-
+import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { AuthService } from '../services/auth.service';
 import { UsuarioLogin } from './../entities/usuariologin.entity';
-import { JwtAuthGuard } from '../guard/jwt-auth.guard';
 
 @Controller('/usuarios')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('/logar')
   login(@Body() usuario: UsuarioLogin): Promise<any> {
