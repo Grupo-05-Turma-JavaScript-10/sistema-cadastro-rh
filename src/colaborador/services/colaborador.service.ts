@@ -9,7 +9,7 @@ export class ColaboradorService {
   constructor(
     @InjectRepository(Colaborador)
     private colaboradorRepository: Repository<Colaborador>,
-  ) { }
+  ) {}
 
   async calcularSalario(
     id: number,
@@ -31,9 +31,8 @@ export class ColaboradorService {
     return await this.colaboradorRepository.find({
       relations: {
         cargo: true,
-        usuario: true
-      }
-
+        usuario: true,
+      },
     });
   }
 
@@ -44,8 +43,8 @@ export class ColaboradorService {
       },
       relations: {
         cargo: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
 
     if (!colaborador)
@@ -62,10 +61,10 @@ export class ColaboradorService {
       where: {
         nome: ILike(`%${nome}%`),
       },
-      relations:{
-                cargo: true,
-                usuario: true
-            }
+      relations: {
+        cargo: true,
+        usuario: true,
+      },
     });
   }
 
@@ -74,14 +73,13 @@ export class ColaboradorService {
   }
 
   async uptade(colaborador: Colaborador): Promise<Colaborador> {
-
-    await this.findById(colaborador.id)
+    await this.findById(colaborador.id);
 
     return await this.colaboradorRepository.save(colaborador);
   }
 
   async delete(id: number): Promise<DeleteResult> {
-    await this.findById(id)
+    await this.findById(id);
 
     return await this.colaboradorRepository.delete(id);
   }

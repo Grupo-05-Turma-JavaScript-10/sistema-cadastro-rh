@@ -15,7 +15,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'MinhaSenha123',
+      password: 'root',
       database: 'db_rh',
       entities: [Colaborador, Cargo, Usuario],
       synchronize: true,
@@ -23,7 +23,7 @@ import { UsuarioModule } from './usuario/usuario.module';
     ColaboradorModule,
     CargoModule,
     AuthModule,
-    UsuarioModule
+    UsuarioModule,
   ],
   controllers: [],
   providers: [],

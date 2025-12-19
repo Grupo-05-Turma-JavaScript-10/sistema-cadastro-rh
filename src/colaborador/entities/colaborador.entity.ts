@@ -35,13 +35,12 @@ export class Colaborador {
   status: boolean;
 
   @ManyToOne(() => Cargo, (cargo) => cargo.colaborador, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
-  cargo: Cargo
+  cargo: Cargo;
 
-
-    @ManyToOne(() => Usuario, (usuario) => usuario.colaborador, {
-        onDelete: "CASCADE"
-    })
-    usuario: Usuario
+  @ManyToOne(() => Usuario, (usuario) => usuario.colaborador, {
+    onDelete: 'CASCADE',
+  })
+  usuario: Usuario;
 }
