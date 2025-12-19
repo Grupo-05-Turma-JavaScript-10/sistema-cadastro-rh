@@ -66,7 +66,7 @@ export class ColaboradorController {
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseIntPipe) id: number){
+  delete(@Param('id', ParseIntPipe) id: number) {
     return this.colaboradorService.delete(id);
   }
 }

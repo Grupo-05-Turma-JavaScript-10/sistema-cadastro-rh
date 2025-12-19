@@ -28,13 +28,22 @@ export class ColaboradorService {
   }
 
   async findAll(): Promise<Colaborador[]> {
-    return await this.colaboradorRepository.find();
+    return await this.colaboradorRepository.find({
+      relations: {
+        cargo: true,
+        usuario: true,
+      },
+    });
   }
 
   async findById(id: number): Promise<Colaborador> {
     const colaborador = await this.colaboradorRepository.findOne({
       where: {
         id,
+      },
+      relations: {
+        cargo: true,
+        usuario: true,
       },
     });
 
@@ -52,6 +61,10 @@ export class ColaboradorService {
       where: {
         nome: ILike(`%${nome}%`),
       },
+      relations: {
+        cargo: true,
+        usuario: true,
+      },
     });
   }
 
@@ -60,14 +73,13 @@ export class ColaboradorService {
   }
 
   async uptade(colaborador: Colaborador): Promise<Colaborador> {
-
-    await this.findById(colaborador.id)
+    await this.findById(colaborador.id);
 
     return await this.colaboradorRepository.save(colaborador);
   }
 
   async delete(id: number): Promise<DeleteResult> {
-    await this.findById(id)
+    await this.findById(id);
 
     return await this.colaboradorRepository.delete(id);
   }
