@@ -19,6 +19,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       database: 'db_rh',
       entities: [Colaborador, Cargo, Usuario],
       synchronize: true,
+      logging: true,
     }),
     ColaboradorModule,
     CargoModule,

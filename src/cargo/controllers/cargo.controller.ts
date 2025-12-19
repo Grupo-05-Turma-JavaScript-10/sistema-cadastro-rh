@@ -10,9 +10,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Cargo } from '../entities/cargo.entity';
-
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @Controller('/cargos')
 export class CargoController {
   constructor(private readonly cargoService: CargoService) {}

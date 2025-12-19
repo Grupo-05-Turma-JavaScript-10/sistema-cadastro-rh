@@ -9,10 +9,13 @@ import {
   Post,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ColaboradorService } from '../services/colaborador.service';
 import { Colaborador } from '../entities/colaborador.entity';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('/colaboradores')
 export class ColaboradorController {
   constructor(private readonly colaboradorService: ColaboradorService) {}
