@@ -15,6 +15,7 @@ import { ColaboradorService } from '../services/colaborador.service';
 import { Colaborador } from '../entities/colaborador.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Colaborador')
 @UseGuards(JwtAuthGuard)
@@ -24,6 +25,18 @@ export class ColaboradorController {
   constructor(private readonly colaboradorService: ColaboradorService) {}
 
   @Put('/calcular-salario/:id')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        horasTrabalhadas: { type: 'number' },
+        valorHora: { type: 'number' },
+        bonus: { type: 'number' },
+        descontos: { type: 'number' },
+      },
+      required: ['horasTrabalhadas', 'valorHora'],
+    },
+  })
   calcularSalario(
     @Param('id', ParseIntPipe) id: number,
     @Body('horasTrabalhadas') horasTrabalhadas: number,
