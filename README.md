@@ -1,98 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🤝 Colab+ | Sistema de Gestão de RH
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![Badge Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow) ![Badge NestJS](https://img.shields.io/badge/Backend-NestJS-red) ![Badge TS](https://img.shields.io/badge/Language-TypeScript-blue) ![Badge Database](https://img.shields.io/badge/Database-MySQL-orange)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> **Colab+** é uma API RESTful desenvolvida para modernizar a gestão de Recursos Humanos. O sistema integra autenticação de usuários, cadastro de colaboradores e uma **inteligência de cálculo de folha de pagamento** baseada em variáveis mensais.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Funcionalidades Principais
 
-## Project setup
+- **🔐 Autenticação e Segurança:** Gestão de usuários com login e vínculo direto ao perfil do colaborador.
+- **📋 Gestão de Colaboradores:** CRUD completo com validação de dados sensíveis (CPF, Email).
+- **👔 Gestão de Cargos:** Organização hierárquica da empresa.
+- **💰 Cálculo Automático de Salários:** Lógica de negócio inteligente que processa o salário líquido considerando:
+  - Salário Base (vinculado ao contrato);
+  - Horas Trabalhadas no mês;
+  - Bônus e Gratificações;
+  - Descontos (INSS, atrasos, etc).
+- **🗄️ Banco de Dados Relacional:** Estrutura robusta utilizando MySQL e TypeORM com relacionamentos integrados.
 
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+Este projeto foi desenvolvido seguindo as melhores práticas do mercado:
+
+- **[Node.js](https://nodejs.org/)** - Runtime JavaScript.
+- **[NestJS](https://nestjs.com/)** - Framework para construção de APIs escaláveis e modulares.
+- **[TypeScript](https://www.typescriptlang.org/)** - Superset do JavaScript para tipagem estática e segura.
+- **[TypeORM](https://typeorm.io/)** - ORM para interação com o banco de dados MySQL.
+- **[MySQL](https://www.mysql.com/)** - Banco de dados relacional.
+- **[Class Validator](https://github.com/typestack/class-validator)** - Validação de dados de entrada (DTOs).
+
+---
+
+## 🗂️ Modelagem de Dados (DER)
+
+O sistema foi arquitetado com base em 3 entidades principais, garantindo integridade e segurança:
+
+### 1. Usuario (`tb_usuarios`)
+Responsável pelo acesso ao sistema.
+- **idUsuario:** Identificador único.
+- **nome:** Nome de exibição.
+- **senha:** Hash criptografado.
+- **foto:** URL da imagem de perfil (suporta até 5000 caracteres para links longos).
+
+### 2. Colaborador (`tb_colaboradores`)
+Contém os dados contratuais e de RH.
+- **id:** Identificador único.
+- **nome:** Nome civil completo.
+- **cpf:** Cadastro de Pessoa Física (Formato: `000.000.000-00` - 14 caracteres).
+- **email:** Email corporativo.
+- **salario:** Salário base contratual (Precisão Decimal 10,2).
+- **data_admissao:** Data de registro na empresa.
+- **status:** Indicador de atividade (Ativo/Inativo).
+- **Cargo_id:** Chave estrangeira para a tabela de Cargos.
+- **Usuario_id:** Chave estrangeira para vínculo de login (Relacionamento 1:1).
+
+### 3. Cargo (`tb_cargos`)
+Define a hierarquia e funções.
+- **id:** Identificador único.
+- **nome:** Título do cargo (ex: Desenvolvedor, Analista de RH).
+- **descricao:** Detalhamento das atribuições.
+
+---
+
+## 🔌 Rotas da API (Exemplos)
+
+### 👤 Colaboradores
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/colaboradores` | Lista todos os colaboradores ativos |
+| `POST` | `/colaboradores` | Cadastra um novo funcionário |
+| `PUT` | `/colaboradores/:id` | Atualiza dados (ex: promoção de cargo) |
+| `POST` | `/colaboradores/:id/calcular-salario` | **Feature:** Calcula o holerite do mês |
+
+**Exemplo de Payload para Cálculo de Salário:**
+```json
+POST /colaboradores/1/calcular-salario
+{
+  "horasTrabalhadas": 220,
+  "bonus": 500.00,
+  "descontos": 150.50
+}
+
+**Resposta do Sistema:**
+```json
+{
+  "nome": "João da Silva",
+  "salarioBase": 3000.00,
+  "totalReceber": 3349.50
+}
+
+# 🏁 Como Rodar o Projeto
+
+## 📋 Pré-requisitos
+- Node.js instalado
+- MySQL Workbench ou Docker rodando
+
+## 🚀 Passo a Passo
+
+### 1️⃣ Clone o repositório
 ```bash
-$ npm install
-```
+git clone https://github.com/seu-usuario/colab-plus.git
+2️⃣ Instale as dependências
+bash
+Copiar código
+cd colab-plus
+npm install
+3️⃣ Configure o Banco de Dados
+Configure suas credenciais do MySQL no arquivo .env
 
-## Compile and run the project
+Crie o banco de dados vazio:
 
-```bash
-# development
-$ npm run start
+sql
+Copiar código
+CREATE DATABASE db_rh;
+4️⃣ Execute o projeto
+bash
+Copiar código
+# Modo de desenvolvimento (com Watch mode)
+npm run start:dev
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
