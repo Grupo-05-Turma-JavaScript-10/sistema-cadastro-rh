@@ -7,6 +7,8 @@ import { CargoModule } from './cargo/cargo.module';
 import { AuthModule } from './auth/auth.module';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -19,14 +21,14 @@ import { UsuarioModule } from './usuario/usuario.module';
       database: 'db_rh',
       entities: [Colaborador, Cargo, Usuario],
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     ColaboradorModule,
     CargoModule,
     AuthModule,
     UsuarioModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

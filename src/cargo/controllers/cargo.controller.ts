@@ -14,8 +14,12 @@ import {
 } from '@nestjs/common';
 import { Cargo } from '../entities/cargo.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Cargo')
 @UseGuards(JwtAuthGuard)
 @Controller('/cargos')
+@ApiBearerAuth()
 export class CargoController {
   constructor(private readonly cargoService: CargoService) {}
 
