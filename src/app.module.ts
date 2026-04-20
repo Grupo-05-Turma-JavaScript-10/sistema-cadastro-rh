@@ -9,14 +9,18 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProdService } from './data/services/prod.service';
+import { DevService } from './data/services/dev.service';
+import { PendenciaModule } from './pendencia/pendencia.module';
+import { HistoricoModule } from './historico/historico.module';
+import { PacoteBeneficioModule } from './pacote-beneficio/pacote-beneficio.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
-      useClass: ProdService,
+      useClass: process.env.NODE_ENV === 'production' ? ProdService : DevService,
       imports: [ConfigModule],
     }),
 
@@ -24,6 +28,9 @@ import { ProdService } from './data/services/prod.service';
     CargoModule,
     AuthModule,
     UsuarioModule,
+    PendenciaModule,
+    HistoricoModule,
+    PacoteBeneficioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,6 +6,8 @@ import { Bcrypt } from '../auth/bcrypt/bcrypt';
 import { Usuario } from '../usuario/entities/usuario.entity';
 import { Cargo } from '../cargo/entities/cargo.entity';
 import { Colaborador } from '../colaborador/entities/colaborador.entity';
+import { Pendencia } from '../pendencia/entities/pendencia.entity';
+import { PacoteBeneficio } from '../pacote-beneficio/entities/pacote-beneficio.entity';
 
 async function run() {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +15,29 @@ async function run() {
 
   const usuarioRepo = app.get<Repository<Usuario>>(getRepositoryToken(Usuario));
   const cargoRepo = app.get<Repository<Cargo>>(getRepositoryToken(Cargo));
-  const colaboradorRepo = app.get<Repository<Colaborador>>(getRepositoryToken(Colaborador));
+  const colaboradorRepo = app.get<Repository<Colaborador>>(
+    getRepositoryToken(Colaborador),
+  );
+  const pendenciaRepo = app.get<Repository<Pendencia>>(
+    getRepositoryToken(Pendencia),
+  );
+  const pacoteRepo = app.get<Repository<PacoteBeneficio>>(getRepositoryToken(PacoteBeneficio));
   const bcrypt = app.get<Bcrypt>(Bcrypt);
+
+  const pacotesNomes = [
+    { nome: 'Pacote Estágio', descricao: 'Apenas Vale Transporte', valorTotal: 150.00 },
+    { nome: 'Pacote Básico', descricao: 'VT + VR', valorTotal: 500.00 },
+    { nome: 'Pacote Pleno', descricao: 'VT + VR + Plano de Saúde', valorTotal: 1200.00 },
+    { nome: 'Pacote Executivo', descricao: 'Benefícios Premium', valorTotal: 2500.00 },
+  ];
+  const pacotes: PacoteBeneficio[] = [];
+  for (const p of pacotesNomes) {
+    let pacote = await pacoteRepo.findOne({ where: { nome: p.nome } });
+    if (!pacote) {
+      pacote = await pacoteRepo.save(p);
+    }
+    pacotes.push(pacote);
+  }
 
   const cargoNomes = [
     { nome: 'Desenvolvedor', descricao: 'Desenvolvimento' },
@@ -74,21 +97,58 @@ async function run() {
     const cpf = `000.000.000-${numero}`;
     const emailBase = nomes[i].toLowerCase().replace(/\s+/g, '.');
     const email = `${emailBase}@empresa.com`;
-    const existe = await colaboradorRepo.findOne({ where: { cpf } });
-    if (!existe) {
+    let colaborador = await colaboradorRepo.findOne({ where: { cpf } });
+    if (!colaborador) {
       const cargo = cargos[i % cargos.length];
       const usuario = i % 2 === 0 ? usuarioRoot : usuarioAdmin;
+      const pacoteBeneficio = pacotes[i % pacotes.length];
       const salario = 2500 + i * 150;
-      await colaboradorRepo.save({
+      
+      const admissao = new Date();
+      admissao.setMonth(admissao.getMonth() - (i % 5));
+
+      const fimExperiencia = new Date(admissao);
+      fimExperiencia.setDate(admissao.getDate() + 90);
+
+      colaborador = await colaboradorRepo.save({
         nome: nomes[i],
         cpf,
         email,
-        data_admissao: new Date(),
+        data_admissao: admissao,
+        dataFimExperiencia: fimExperiencia,
         salario,
         status: true,
+        tipoContrato: i % 3 === 0 ? 'PJ' : (i % 4 === 0 ? 'ESTAGIO' : 'CLT'),
         cargo,
         usuario,
+        pacoteBeneficio,
       });
+    }
+
+    const pendenciasExistentes = await pendenciaRepo.count({
+      where: { colaborador: { id: colaborador.id } },
+    });
+
+    if (pendenciasExistentes === 0) {
+      const titulosPadrao = [
+        'Documento de identidade (RG)',
+        'CPF',
+        'CTPS',
+        'Comprovante de residência',
+        'Dados bancários',
+        'ASO (Atestado de Saúde Ocupacional)',
+      ];
+
+      await pendenciaRepo.save(
+        titulosPadrao.map((titulo) =>
+          pendenciaRepo.create({
+            titulo,
+            obrigatoria: true,
+            concluida: false,
+            colaborador,
+          }),
+        ),
+      );
     }
   }
 

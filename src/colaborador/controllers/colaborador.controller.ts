@@ -10,6 +10,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Header,
 } from '@nestjs/common';
 import { ColaboradorService } from '../services/colaborador.service';
 import { Colaborador } from '../entities/colaborador.entity';
@@ -55,19 +56,54 @@ export class ColaboradorController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Colaborador[]> {
+  findAll(): Promise<any[]> {
     return this.colaboradorService.findAll();
+  }
+
+  @Get('/alertas/vencimentos')
+  @HttpCode(HttpStatus.OK)
+  getAlertasVencimentos(): Promise<any[]> {
+    return this.colaboradorService.getAlertasVencimentos(45); // alertas para os próximos 45 dias
+  }
+
+  @Get('/exportar/csv')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename=colaboradores.csv')
+  async exportarCsv(): Promise<string> {
+    const colaboradores = await this.colaboradorService.findAll();
+    const headers = ['ID', 'Nome', 'CPF', 'Email', 'Data Admissão', 'Status', 'Tipo Contrato', 'Cargo', 'Salário Bruto', 'Pacote Benefícios', 'Encargos', 'Custo Total'];
+    const rows = colaboradores.map(c => {
+      const salarioBruto = Number(c.salario) || 0;
+      const valorBeneficios = c.pacoteBeneficio ? Number(c.pacoteBeneficio.valorTotal) : 0;
+      
+      return [
+        c.id,
+        c.nome,
+        c.cpf,
+        c.email,
+        c.data_admissao,
+        c.status ? 'Ativo' : 'Inativo',
+        c.tipoContrato || 'CLT',
+        c.cargo?.nome || '',
+        salarioBruto.toFixed(2),
+        valorBeneficios.toFixed(2),
+        c.encargos.toFixed(2),
+        c.custoTotal.toFixed(2)
+      ].join(',');
+    });
+    return [headers.join(','), ...rows].join('\n');
   }
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number): Promise<Colaborador> {
+  findById(@Param('id', ParseIntPipe) id: number): Promise<any> {
     return this.colaboradorService.findById(id);
   }
 
   @Get('/nome/:nome')
   @HttpCode(HttpStatus.OK)
-  findAllByNome(@Param('nome') nome: string): Promise<Colaborador[]> {
+  findAllByNome(@Param('nome') nome: string): Promise<any[]> {
     return this.colaboradorService.findAllByNome(nome);
   }
 
