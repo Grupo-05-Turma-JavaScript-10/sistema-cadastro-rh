@@ -102,22 +102,57 @@ POST /colaboradores/1/calcular-salario
 ### 1️⃣ Clone o repositório
 ```bash
 git clone https://github.com/seu-usuario/colab-plus.git
-2️⃣ Instale as dependências
-bash
-Copiar código
-cd colab-plus
+```
+
+### 2️⃣ Instale as dependências
+```bash
+cd sistema-cadastro-rh
 npm install
-3️⃣ Configure o Banco de Dados
-Configure suas credenciais do MySQL no arquivo .env
+```
 
+### 3️⃣ Configure o Banco de Dados
 Crie o banco de dados vazio:
-
-sql
-Copiar código
+```sql
 CREATE DATABASE db_rh;
-4️⃣ Execute o projeto
-bash
-Copiar código
+```
+
+
+## Configuração via .env
+
+Crie um arquivo `.env` na raiz do projeto e configure suas credenciais do MySQL no arquivo `.env` copiando o arquivo `.env.example`:
+
+- Desenvolvimento (MySQL):
+  - DB_MODE=dev
+  - DB_HOST=localhost
+  - DB_PORT=3306
+  - DB_USER=root
+  - DB_PASS=root
+  - DB_NAME=db_rh
+
+- Produção (Postgres):
+  - DB_MODE=prod
+  - DATABASE_URL=postgres://usuario:senha@host:5432/nome_db
+
+Copie o arquivo `.env.example` para `.env`, ajuste os valores e rode:
+```bash
+cp .env.example .env
+npm run start:dev
+```
+### 4️⃣ Execute o projeto
+```bash
 # Modo de desenvolvimento (com Watch mode)
 npm run start:dev
+```
+
+## Seeds (popular dados de exemplo)
+```bash
+npm run seed
+```
+Insere cargos básicos, usuário admin e um colaborador de exemplo. Use após configurar corretamente o `.env`.
+
+### 📜 Swagger (Documentação da API)
+- Após iniciar, acesse no navegador:
+  - http://localhost:4000/swagger (porta padrão 4000)
+  - Se você alterou `PORT` no `.env`, use: `http://localhost:<PORT>/swagger`
+- A raiz `/` também redireciona automaticamente para `/swagger`.
 
